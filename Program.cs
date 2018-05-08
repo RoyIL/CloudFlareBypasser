@@ -24,21 +24,16 @@ namespace CloudflareBypass
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Your site address: ");
             Console.ResetColor();
-            var site = Console.ReadLine();
-            var url = site;
-            if (!url.ToLower().Contains("http://")) url = "http://" + site;
-            Uri myUri = new Uri(url);
-            var ip = Dns.GetHostAddresses(myUri.Host)[0];
+            var url = Console.ReadLine();
+            if (!url.ToLower().Contains("http://")) url = "http://" + url;
+            var ip = Dns.GetHostAddresses(new Uri(url).Host)[0];
             if (new WebClient().DownloadString("http://ip-api.com/json/" + ip.ToString()).ToLower().Contains("cloudflare"))
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.crimeflare.org:82/cgi-bin/cfsearch.cgi");
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-                using (StreamWriter writer = new StreamWriter(request.GetRequestStream(), Encoding.ASCII))
-                {
-                    writer.Write("cfS=" + site);
-                }
+                using (StreamWriter writer = new StreamWriter(request.GetRequestStream(), Encoding.ASCII)) { writer.Write("cfS=" + site);}
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
