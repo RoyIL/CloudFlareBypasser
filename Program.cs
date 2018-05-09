@@ -38,10 +38,7 @@ namespace CloudflareBypass
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     var str = reader.ReadToEnd();
-                    str = str.Substring(str.IndexOf("<LI>") + 4).Replace(site.ToLower(), "");
-                    str = str.Substring(str.IndexOf(" ") + 2);
-                    str = str.Replace(str.Substring(str.IndexOf(" ")), "");
-                    if (!str.Contains("TTP"))
+                    str = str.Substring(str.IndexOf("<LI>") + 4).Replace(site.ToLower(), "").Substring(str.IndexOf(" ") + 2).Replace(str.Substring(str.IndexOf(" ")), "");                    if (!str.Contains("TTP"))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("[Success]");
@@ -54,7 +51,7 @@ namespace CloudflareBypass
             else { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Website isn't an Cloudflare site."); }
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(new WebClient().DownloadString("https://pastebin.com/raw/sM2T3jTt"));
-            Thread.Sleep(304324141);
+            Console.ReadLine();
         }
 
         static void Listener()
